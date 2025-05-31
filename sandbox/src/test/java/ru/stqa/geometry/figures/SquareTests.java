@@ -15,4 +15,15 @@ public class SquareTests {
         var s = new Square (5.0);
         Assertions.assertEquals(20, s.perimeter());
     }
+
+    @Test
+    void cannotCreateSquareWithNegativeSide(){
+        try {
+            new Square(-5);
+            Assertions.fail();
+        } catch (IllegalArgumentException exeption) {
+            System.out.println(exeption);
+
+        }
+    }
 }

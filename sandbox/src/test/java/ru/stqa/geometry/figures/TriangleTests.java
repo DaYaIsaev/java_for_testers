@@ -5,15 +5,48 @@ import org.junit.jupiter.api.Test;
 
 public class TriangleTests {
     @Test
-    void calculateArea (){
-        var t = new Triangle(5,4,3);
+    void calculateArea() {
+        var t = new Triangle(5, 4, 3);
         Assertions.assertEquals(6, t.area());
     }
 
     @Test
-    void calculatePerimeter (){
-        var t = new Triangle(5,4,3);
+    void calculatePerimeter() {
+        var t = new Triangle(5, 4, 3);
         Assertions.assertEquals(12, t.perimeter());
 
     }
+
+    @Test
+    void cannotCreateTriangleWithNegativeSideA() {
+        try {
+            new Triangle(-5, 4, 3);
+            Assertions.fail();
+        } catch (IllegalArgumentException exeption) {
+
+        }
+    }
+    @Test
+    void cannotCreateTriangleWithNegativeSideB() {
+        try {
+            new Triangle(5, -4, 3);
+            Assertions.fail();
+        } catch (IllegalArgumentException exeption) {
+
+        }
+    }
+    @Test
+    void cannotCreateTriangleWithNegativeSideC() {
+        try {
+            new Triangle(5, 4, -3);
+            Assertions.fail();
+        } catch (IllegalArgumentException exeption) {
+
+        }
+    }
+
 }
+
+
+
+

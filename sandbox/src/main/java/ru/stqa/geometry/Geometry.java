@@ -12,6 +12,9 @@ public class Geometry {
 
         Triangle.printTriangleArea(new Triangle(5, 4, 3));
 
+        //Triangle.printTriangleArea(new Triangle(10, 10, 3));
+
+        Triangle.printTriangleArea(new Triangle(-6, 10, 20));
 
 
        // Rectangle.printRectangleArea(3.0 , 7.0);

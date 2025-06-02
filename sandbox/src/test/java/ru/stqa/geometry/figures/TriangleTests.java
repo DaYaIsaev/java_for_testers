@@ -26,6 +26,7 @@ public class TriangleTests {
 
         }
     }
+
     @Test
     void cannotCreateTriangleWithNegativeSideB() {
         try {
@@ -35,6 +36,7 @@ public class TriangleTests {
 
         }
     }
+
     @Test
     void cannotCreateTriangleWithNegativeSideC() {
         try {
@@ -46,35 +48,62 @@ public class TriangleTests {
     }
 
     @Test
-    void testEquals(){
-        var t1 = new Triangle(5,4,3);
-        var t2 = new Triangle (3,4,5);
+    void testEquals() {
+        var t1 = new Triangle(5, 4, 3);
+        var t2 = new Triangle(3, 4, 5);
         Assertions.assertEquals(t1, t2);
 
     }
 
     @Test
-    void testEquals1(){
-        var t1 = new Triangle(5,4,3);
-        var t2 = new Triangle (5,4,3);
+    void testEquals1() {
+        var t1 = new Triangle(5, 4, 3);
+        var t2 = new Triangle(5, 4, 3);
         Assertions.assertEquals(t1, t2);
 
     }
 
     @Test
-    void testEquals2(){
-        var t1 = new Triangle(5,4,3);
-        var t2 = new Triangle (4,5,3);
+    void testEquals2() {
+        var t1 = new Triangle(5, 4, 3);
+        var t2 = new Triangle(4, 5, 3);
         Assertions.assertEquals(t1, t2);
 
     }
 
     @Test
-    void testEquals3(){
-        var t1 = new Triangle(5,4,3);
-        var t2 = new Triangle (3,4,5);
+    void testEquals3() {
+        var t1 = new Triangle(5, 4, 3);
+        var t2 = new Triangle(3, 4, 5);
         Assertions.assertEquals(t1, t2);
 
+    }
+
+    @Test
+    void canNotCreateTriangleWithNotSatisfiedInqualityA() {
+        try {
+            new Triangle(15, 4, 3);
+            Assertions.fail();
+        } catch (IllegalArgumentException exception) {
+        }
+    }
+
+    @Test
+    void canNotCreateTriangleWithNotSatisfiedInqualityB() {
+        try {
+            new Triangle(4, 15, 3);
+            Assertions.fail();
+        } catch (IllegalArgumentException exception) {
+        }
+    }
+
+    @Test
+    void canNotCreateTriangleWithNotSatisfiedInqualityC() {
+        try {
+            new Triangle(4, 3, 15);
+            Assertions.fail();
+        } catch (IllegalArgumentException exception) {
+        }
     }
 
 }

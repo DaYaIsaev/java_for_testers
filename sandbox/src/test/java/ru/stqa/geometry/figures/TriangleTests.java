@@ -80,6 +80,22 @@ public class TriangleTests {
     }
 
     @Test
+    void testEquals4() {
+        var t1 = new Triangle(5, 4, 3);
+        var t2 = new Triangle(4, 3, 5);
+        Assertions.assertEquals(t1, t2);
+
+    }
+
+    @Test
+    void testEquals5() {
+        var t1 = new Triangle(5, 4, 3);
+        var t2 = new Triangle(3, 5, 4);
+        Assertions.assertEquals(t1, t2);
+
+    }
+
+    @Test
     void canNotCreateTriangleWithNotSatisfiedInqualityA() {
         try {
             new Triangle(15, 4, 3);

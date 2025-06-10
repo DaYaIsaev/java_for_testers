@@ -1,0 +1,44 @@
+package manager;
+
+import model.ContactData;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+
+public class ContactHelper extends HelperBase {
+
+    public ContactHelper(ApplicationManager manager) {
+        super(manager);
+    }
+
+    public void createContact(ContactData contact) {
+        openAddContactPage();
+        //initGroupCreation();
+        fillContactForm(contact);
+        submitContactCreation();
+        returnToContactsPage();
+    }
+
+    private void returnToContactsPage() {
+        click(By.linkText("home page"));
+    }
+
+    private void submitContactCreation() {
+        click(By.name("submit"));
+    }
+
+    private void fillContactForm(ContactData contacts) {
+        type(By.name("firstname"), contacts.firstName());
+        type(By.name("lastname"), contacts.lastName());
+        type(By.name("address"), contacts.address());
+        type(By.name("home"), contacts.phoneHome());
+        type(By.name("email"), contacts.email());
+
+    }
+
+
+    private void openAddContactPage() {
+        if (!manager.isElementPresent(By.name("Last name"))) {
+            click(By.linkText("add new"));
+        }
+    }
+}

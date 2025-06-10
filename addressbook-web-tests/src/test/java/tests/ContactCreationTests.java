@@ -8,6 +8,7 @@ public class ContactCreationTests extends TestBase{
 
     @Test
     public void canCreateContact(){
+
         app.contacts().createContact(new ContactData("Ivan", "", "Ivanov", "",
                 "", "", "Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
                 "", "", "", "", "", "", "",
@@ -17,6 +18,7 @@ public class ContactCreationTests extends TestBase{
 
     @Test
     public void canCreateContactWithNameOnly() {
+
         app.contacts().createContact(new ContactData().withFirsName("some name"));
 
     }

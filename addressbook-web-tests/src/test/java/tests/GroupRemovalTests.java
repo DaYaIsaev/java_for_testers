@@ -13,8 +13,8 @@ public class GroupRemovalTests extends TestBase {
         }
         int groupCount = app.groups().getCount();
         app.groups().removeGroup();
-        int newgroupCount = app.groups().getCount();
-        Assertions.assertEquals(groupCount - 1, newgroupCount );
+        int newGroupCount = app.groups().getCount();
+        Assertions.assertEquals(groupCount - 1, newGroupCount );
     }
     @Test
     public void canRemoveAllGroupsAtOnce(){

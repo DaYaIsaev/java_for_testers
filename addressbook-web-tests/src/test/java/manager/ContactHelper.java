@@ -1,7 +1,6 @@
 package manager;
 
 import model.ContactData;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 public class ContactHelper extends HelperBase {
@@ -76,5 +75,23 @@ public class ContactHelper extends HelperBase {
     private void selectContact() {
 
         click(By.name("selected[]"));
+    }
+
+    public int getContactsCount() {
+        openContactsPage();
+        return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
+    private void selectAllContacts() {
+        var checkBoxes = manager.driver.findElements(By.name("selected[]"));
+        for (var checkBox : checkBoxes) {
+            checkBox.click();
+        }
+    }
+
+    public void removeAllContacts() {
+        openContactsPage();
+        selectAllContacts();
+        removeSelectedContact();
     }
 }

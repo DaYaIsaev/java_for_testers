@@ -9,8 +9,8 @@ public class ContactRemovalTests extends TestBase{
     @Test
     public void canRemoveContact() {
 
-        if (!app.contacts().isContactPresent()) {
-            app.contacts().createContact(new ContactData("Ivan", "", "Ivanov", "",
+        if (app.contacts().getContactsCount() == 0) {
+            app.contacts().createContact(new ContactData("","Ivan", "", "Ivanov", "",
                     "", "", "Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
                     "", "", "", "", "", "", "",
                     "", "", ""));
@@ -21,7 +21,7 @@ public class ContactRemovalTests extends TestBase{
     @Test
     public void canRemoveAllContacts() {
         if (app.contacts().getContactsCount() == 0) {
-            app.contacts().createContact(new ContactData("Ivan", "", "Ivanov", "",
+            app.contacts().createContact(new ContactData("","Ivan", "", "Ivanov", "",
                     "", "", "Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
                     "", "", "", "", "", "", "",
                     "", "", ""));

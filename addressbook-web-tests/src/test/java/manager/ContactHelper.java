@@ -1,7 +1,11 @@
 package manager;
 
 import model.ContactData;
+import model.GroupData;
 import org.openqa.selenium.By;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
 
@@ -38,7 +42,6 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contacts.email());
 
     }
-
 
     private void openAddContactPage() {
 
@@ -93,5 +96,35 @@ public class ContactHelper extends HelperBase {
         openContactsPage();
         selectAllContacts();
         removeSelectedContact();
+    }
+
+    private void submitContactModification() {
+        click(By.name("update"));
+    }
+
+    private void initContactModification() {
+        click(By.xpath("//img[@alt='Edit']"));
+    }
+
+    public List<ContactData> getContactsList() {
+        openContactsPage();
+        var contacts = new ArrayList<ContactData>();
+        var entrys = manager.driver.findElements(By.name("entry"));
+        for (var entry: entrys){
+            var name = entry.getText();
+            var checkbox = entry.findElement(By.name("selected[]"));
+            var id = checkbox.getAttribute("value");
+            contacts.add(new ContactData().withId(id).withFirsName("modified name"));
+        }
+        return contacts;
+    }
+
+    public void modifyContact(ContactData contact, ContactData modifiedContact) {
+        openContactsPage();
+        selectContact();
+        initContactModification();
+        fillContactForm(modifiedContact);
+        submitContactModification();
+        returnToContactsPage();
     }
 }

@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ContactHelper extends HelperBase {
 
     public ContactHelper(ApplicationManager manager) {
@@ -63,10 +64,9 @@ public class ContactHelper extends HelperBase {
         }
     }
 
-    public void removeContact() {
-
+    public void removeContact(ContactData contact) {
         openContactsPage();
-        selectContact();
+        selectContact(contact);
         removeSelectedContact();
         //returnToContactsPage();
     }
@@ -75,9 +75,9 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//*[@id=\"content\"]/form[2]/div[2]/input"));
     }
 
-    private void selectContact() {
+    private void selectContact(ContactData contact) {
 
-        click(By.name("selected[]"));
+        click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
 
     public int getContactsCount() {
@@ -111,17 +111,18 @@ public class ContactHelper extends HelperBase {
         var contacts = new ArrayList<ContactData>();
         var entrys = manager.driver.findElements(By.name("entry"));
         for (var entry: entrys){
-            var name = entry.getText();
+            var lastName = entry.findElement(By.cssSelector("td:nth-child(2)")).getText();
+            var firstName = entry.findElement(By.cssSelector("td:nth-child(3)")).getText();
             var checkbox = entry.findElement(By.name("selected[]"));
             var id = checkbox.getAttribute("value");
-            contacts.add(new ContactData().withId(id).withFirsName("modified name"));
+            contacts.add(new ContactData().withId(id).withFirsName(firstName).withLastName(lastName));
         }
         return contacts;
     }
 
     public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openContactsPage();
-        selectContact();
+        selectContact(contact);
         initContactModification();
         fillContactForm(modifiedContact);
         submitContactModification();

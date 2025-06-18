@@ -31,7 +31,8 @@ public class GroupRemovalTests extends TestBase {
             app.groups().createGroup(new GroupData("", "Group name4", "Group header4", "Group footer4"));
         }
         app.groups().removeAllGroups();
-        Assertions.assertEquals(0,app.groups().getCount());
+        var groups = app.groups().getList();
+        Assertions.assertEquals(0,groups.size());
     }
 
 }

@@ -48,7 +48,10 @@ public class GroupCreationTests extends TestBase {
         };
         newGroups.sort(compareById);
         var expectedList = new ArrayList<>(oldGroups);
-        expectedList.add(group.withId(newGroups.get(newGroups.size() - 1).id()).withHeader("").withFooter(""));
+        expectedList.add(group
+                .withId(newGroups.get(newGroups.size() - 1).id())
+                .withHeader("")
+                .withFooter(""));
         expectedList.sort(compareById);
         Assertions.assertEquals(newGroups, expectedList);
 

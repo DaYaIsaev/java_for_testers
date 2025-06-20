@@ -102,15 +102,16 @@ public class ContactHelper extends HelperBase {
         click(By.name("update"));
     }
 
-    private void initContactModification() {
-        click(By.xpath("//img[@alt='Edit']"));
+    private void initContactModification(ContactData contact) {
+        //click(By.xpath("//img[@alt='Edit']"));
+        click(By.xpath(String.format("//tr[.//input[@id='%s']]/td[@class='center']/a[.//img[@alt='Edit']]", contact.id())));
     }
 
     public List<ContactData> getContactsList() {
         openContactsPage();
         var contacts = new ArrayList<ContactData>();
         var entrys = manager.driver.findElements(By.name("entry"));
-        for (var entry: entrys){
+        for (var entry : entrys) {
             var lastName = entry.findElement(By.cssSelector("td:nth-child(2)")).getText();
             var firstName = entry.findElement(By.cssSelector("td:nth-child(3)")).getText();
             var checkbox = entry.findElement(By.name("selected[]"));
@@ -123,7 +124,7 @@ public class ContactHelper extends HelperBase {
     public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openContactsPage();
         selectContact(contact);
-        initContactModification();
+        initContactModification(contact);
         fillContactForm(modifiedContact);
         submitContactModification();
         returnToContactsPage();

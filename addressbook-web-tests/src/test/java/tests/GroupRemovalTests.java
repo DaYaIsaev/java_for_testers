@@ -22,17 +22,18 @@ public class GroupRemovalTests extends TestBase {
         var newGroups = app.groups().getList();
         var expectedList = new ArrayList<>(oldGroups);
         expectedList.remove(index);
-        Assertions.assertEquals(newGroups, expectedList );
+        Assertions.assertEquals(newGroups, expectedList);
 
     }
+
     @Test
-    public void canRemoveAllGroupsAtOnce(){
+    public void canRemoveAllGroupsAtOnce() {
         if (app.groups().getCount() == 0) {
             app.groups().createGroup(new GroupData("", "Group name4", "Group header4", "Group footer4"));
         }
         app.groups().removeAllGroups();
         var groups = app.groups().getList();
-        Assertions.assertEquals(0,groups.size());
+        Assertions.assertEquals(0, groups.size());
     }
 
 }

@@ -78,7 +78,7 @@ public class GroupHelper extends HelperBase {
     }
 
     private void selectGroup(GroupData group) {
-        click(By.cssSelector(String.format("input[value='%s']",group.id())));
+        click(By.cssSelector(String.format("input[value='%s']", group.id())));
     }
 
     public int getCount() {
@@ -95,7 +95,7 @@ public class GroupHelper extends HelperBase {
 
     private void selectAllGroups() {
         var checkBoxes = manager.driver.findElements(By.name("selected[]"));
-        for (var checkBox: checkBoxes) {
+        for (var checkBox : checkBoxes) {
             checkBox.click();
         }
     }
@@ -104,7 +104,7 @@ public class GroupHelper extends HelperBase {
         openGroupsPage();
         var groups = new ArrayList<GroupData>();
         var spans = manager.driver.findElements(By.cssSelector(".group"));
-        for (var span: spans){
+        for (var span : spans) {
             var name = span.getText();
             var checkbox = span.findElement(By.name("selected[]"));
             var id = checkbox.getAttribute("value");

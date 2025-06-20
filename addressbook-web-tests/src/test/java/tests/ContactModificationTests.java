@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-public class ContactModificationTests extends TestBase{
+public class ContactModificationTests extends TestBase {
 
     @Test
-    void canModifyContact(){
+    void canModifyContact() {
         if (app.contacts().getContactsCount() == 0) {
-            app.contacts().createContact(new ContactData("","Ivan", "", "Ivanov", "",
+            app.contacts().createContact(new ContactData("", "Ivan", "", "Ivanov", "",
                     "", "", "Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
                     "", "", "", "", "", "", "",
                     "", "", ""));

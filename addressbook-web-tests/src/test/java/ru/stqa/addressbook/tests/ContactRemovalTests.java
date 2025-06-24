@@ -1,7 +1,6 @@
-package tests;
+package ru.stqa.addressbook.tests;
 
-import model.ContactData;
-import model.GroupData;
+import ru.stqa.addressbook.model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,24 +8,24 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-public class ContactModificationTests extends TestBase {
+public class ContactRemovalTests extends TestBase {
 
     @Test
-    void canModifyContact() {
+    public void canRemoveContact() {
+
         if (app.contacts().getContactsCount() == 0) {
             app.contacts().createContact(new ContactData("", "Ivan", "", "Ivanov", "",
-                    "", "", "Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
+                    "", "", "","Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
                     "", "", "", "", "", "", "",
                     "", "", ""));
         }
         var oldContacts = app.contacts().getContactsList();
         var rnd = new Random();
         var index = rnd.nextInt(oldContacts.size());
-        var testContactData = new ContactData().withFirsName("modified name");
-        app.contacts().modifyContact(oldContacts.get(index), testContactData);
+        app.contacts().removeContact(oldContacts.get(index));
         var newContacts = app.contacts().getContactsList();
         var expectedList = new ArrayList<>(oldContacts);
-        expectedList.set(index, testContactData.withId(oldContacts.get(index).id()));
+        expectedList.remove(oldContacts.get(index));
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
@@ -34,6 +33,18 @@ public class ContactModificationTests extends TestBase {
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
 
+    }
 
+    @Test
+    public void canRemoveAllContacts() {
+        if (app.contacts().getContactsCount() == 0) {
+            app.contacts().createContact(new ContactData("", "Ivan", "", "Ivanov", "",
+                    "", "","", "Grandmother village", "112", "", "", "", "i_ivanov@mail.ru",
+                    "", "", "", "", "", "", "",
+                    "", "", ""));
+        }
+        app.contacts().removeAllContacts();
+        var contacts = app.contacts().getContactsList();
+        Assertions.assertEquals(0, contacts.size());
     }
 }

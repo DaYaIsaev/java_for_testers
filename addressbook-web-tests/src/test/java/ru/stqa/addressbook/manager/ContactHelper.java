@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.stqa.addressbook.common.CommonFunctions.randomFile;
+
 
 public class ContactHelper extends HelperBase {
 
@@ -116,7 +118,7 @@ public class ContactHelper extends HelperBase {
             var firstName = entry.findElement(By.cssSelector("td:nth-child(3)")).getText();
             var checkbox = entry.findElement(By.name("selected[]"));
             var id = checkbox.getAttribute("value");
-            contacts.add(new ContactData().withId(id).withFirsName(firstName).withLastName(lastName));
+            contacts.add(new ContactData().withId(id).withFirsName(firstName).withLastName(lastName).withPhoto(randomFile("src/test/resources/images")));
         }
         return contacts;
     }

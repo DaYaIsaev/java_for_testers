@@ -1,29 +1,33 @@
 package ru.stqa.addressbook.generator;
 
 //import com.beust.jcommander.JCommander;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ru.stqa.addressbook.common.CommonFunctions;
+import ru.stqa.addressbook.model.ContactData;
 import ru.stqa.addressbook.model.GroupData;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static ru.stqa.addressbook.common.CommonFunctions.randomFile;
+
 public class Generator {
 
-    @Parameter(names={"--type", "-t"})
+    @Parameter(names = {"--type", "-t"})
     String type;
 
-    @Parameter(names={"--output", "-o"})
+    @Parameter(names = {"--output", "-o"})
     String output;
 
-    @Parameter(names={"--format", "-f"})
+    @Parameter(names = {"--format", "-f"})
     String format;
 
-    @Parameter(names={"--count", "-n"})
+    @Parameter(names = {"--count", "-n"})
     int count;
 
 
@@ -42,31 +46,41 @@ public class Generator {
     }
 
     private void save(Object data) throws IOException {
-        if ("json".equals(format)){
+        if ("json".equals(format)) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             mapper.writeValue(new File(output), data);
         } else {
             throw new IllegalArgumentException("Неизвестный формат данных " + format);
         }
-
-
     }
 
     private Object generateContacts() {
-        return null;
-    }
-
-
-    private Object generate() { {
-        if ("groups".equals(type)) {
-            return generateGroups();
-        } else if ("contacts".equals(type)){
-            return generateContacts();
-        } else {
-            throw new IllegalArgumentException("Неизвестный тип данных " + type);
+        var result = new ArrayList<ContactData>();
+        for (int i = 0; i < count; i++) {
+            result.add(new ContactData().
+                    withFirsName(CommonFunctions.randomString(i * 10))
+                    .withLastName(CommonFunctions.randomString(i * 10))
+                    .withPhoneHome(CommonFunctions.randomString(i * 10))
+                    .withEmail(CommonFunctions.randomString(i * 10))
+                    .withPhoneHome(CommonFunctions.randomString(i * 10))
+                    .withPhoto(randomFile("src/test/resources/images"))
+                    .withAddress(CommonFunctions.randomString(i * 10)));
         }
+        return result;
     }
+
+
+    private Object generate() {
+        {
+            if ("groups".equals(type)) {
+                return generateGroups();
+            } else if ("contacts".equals(type)) {
+                return generateContacts();
+            } else {
+                throw new IllegalArgumentException("Неизвестный тип данных " + type);
+            }
+        }
     }
 
     private Object generateGroups() {
@@ -78,8 +92,5 @@ public class Generator {
                     .withFooter(CommonFunctions.randomString(i * 10)));
         }
         return result;
-
     }
-
-
 }

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
+import static ru.stqa.addressbook.common.CommonFunctions.randomFile;
+
 public class ContactModificationTests extends TestBase {
 
     @Test

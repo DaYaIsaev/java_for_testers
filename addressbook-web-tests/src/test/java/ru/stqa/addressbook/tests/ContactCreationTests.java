@@ -47,8 +47,10 @@ public class ContactCreationTests extends TestBase {
         };
         newContacts.sort(compareById);
         var expectedContactList = new ArrayList<>(oldContacts);
+        var lastNewContact = newContacts.get(newContacts.size() - 1);
+        var temp = contact.withPhoto(lastNewContact.photo());
         expectedContactList.add(contact
-                .withId(newContacts.get(newContacts.size() - 1).id()).withEmail("").withAddress("").withPhoneHome(""));
+                .withId(lastNewContact.id()).withEmail("").withAddress("").withPhoneHome("").withPhoto(""));
         expectedContactList.sort(compareById);
         Assertions.assertEquals(expectedContactList, newContacts);
 

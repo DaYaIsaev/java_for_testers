@@ -19,8 +19,7 @@ public class ContactHelper extends HelperBase {
     public void createContact(ContactData contact) {
 
         openAddContactPage();
-        //initGroupCreation();
-        fillContactForm(contact);
+        fillContactFormWithoutAttach(contact);
         submitContactCreation();
         returnToContactsPage();
     }
@@ -40,6 +39,16 @@ public class ContactHelper extends HelperBase {
         type(By.name("firstname"), contacts.firstName());
         type(By.name("lastname"), contacts.lastName());
         attach(By.name("photo"), contacts.photo());
+        type(By.name("address"), contacts.address());
+        type(By.name("home"), contacts.phoneHome());
+        type(By.name("email"), contacts.email());
+
+    }
+
+    private void fillContactFormWithoutAttach(ContactData contacts) {
+
+        type(By.name("firstname"), contacts.firstName());
+        type(By.name("lastname"), contacts.lastName());
         type(By.name("address"), contacts.address());
         type(By.name("home"), contacts.phoneHome());
         type(By.name("email"), contacts.email());
@@ -118,16 +127,17 @@ public class ContactHelper extends HelperBase {
             var firstName = entry.findElement(By.cssSelector("td:nth-child(3)")).getText();
             var checkbox = entry.findElement(By.name("selected[]"));
             var id = checkbox.getAttribute("value");
-            contacts.add(new ContactData().withId(id).withFirsName(firstName).withLastName(lastName).withPhoto(randomFile("src/test/resources/images")));
+            contacts.add(new ContactData().withId(id).withFirsName(firstName).withLastName(lastName));
         }
         return contacts;
     }
+
 
     public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openContactsPage();
         selectContact(contact);
         initContactModification(contact);
-        fillContactForm(modifiedContact);
+        fillContactFormWithoutAttach(modifiedContact);
         submitContactModification();
         returnToContactsPage();
     }

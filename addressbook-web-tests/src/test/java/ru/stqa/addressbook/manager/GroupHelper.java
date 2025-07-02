@@ -43,17 +43,14 @@ public class GroupHelper extends HelperBase {
     }
 
     private void submitGroupCreation() {
-
         click(By.name("submit"));
     }
 
     private void initGroupCreation() {
-
         click(By.name("new"));
     }
 
     private void removeSelectedGroups() {
-
         click(By.xpath("(//input[@name=\'delete\'])[2]"));
     }
 
@@ -90,7 +87,6 @@ public class GroupHelper extends HelperBase {
         openGroupsPage();
         selectAllGroups();
         removeSelectedGroups();
-
     }
 
     private void selectAllGroups() {

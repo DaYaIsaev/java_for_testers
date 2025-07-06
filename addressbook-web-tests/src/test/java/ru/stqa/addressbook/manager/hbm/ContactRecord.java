@@ -22,7 +22,6 @@ public class ContactRecord {
     public String title;
     public String address;
 
-
     @Column(name = "home")
     public String phoneHome;
 

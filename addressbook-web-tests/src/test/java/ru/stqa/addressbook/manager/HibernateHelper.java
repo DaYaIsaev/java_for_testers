@@ -3,6 +3,7 @@ package ru.stqa.addressbook.manager;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import ru.stqa.addressbook.manager.hbm.ContactRecord;
 import ru.stqa.addressbook.manager.hbm.GroupRecord;
 import ru.stqa.addressbook.model.ContactData;
@@ -23,7 +24,7 @@ public class HibernateHelper extends HelperBase {
                 .addAnnotatedClass(ContactRecord.class)
                 .addAnnotatedClass(GroupRecord.class)
                 .setProperty(AvailableSettings.JAKARTA_JDBC_URL,
-                        "jdbc:mysql://localhost/addressbook")
+                        "jdbc:mysql://localhost/addressbook?zeroDateTimeBehavior=convertToNull")
                 .setProperty(AvailableSettings.JAKARTA_JDBC_USER,
                         "root")
                 .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD,
@@ -99,6 +100,12 @@ public class HibernateHelper extends HelperBase {
         });
     }
 
+    public long getContactId() {
+        return sessionFactory.fromSession(session -> {
+            return session.createQuery("select id from ContactRecord where firstname = contact.firstname()", Long.class).getSingleResult();
+        });
+    }
+
     public void createGroup(GroupData groupData) {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
@@ -112,6 +119,20 @@ public class HibernateHelper extends HelperBase {
             session.getTransaction().begin();
             session.persist(convertContact(contactData));
             session.getTransaction().commit();
+        });
+    }
+
+    public List<ContactData> getContactsInGroup(GroupData group) {
+        return sessionFactory.fromSession(session -> {
+           return convertContactList(session.find(GroupRecord.class, group.id()).contacts);
+
+        });
+    }
+
+    public Long getCountContactsInGroup(int groupId) {
+        return sessionFactory.fromSession(session -> {
+            return session.createQuery("SELECT COUNT(c) FROM GroupRecord g JOIN g.contacts c WHERE g.id = :groupId", Long.class).getSingleResult();
+
         });
     }
 }

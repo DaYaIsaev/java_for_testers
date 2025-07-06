@@ -1,7 +1,9 @@
 package ru.stqa.addressbook.manager;
 
+import org.openqa.selenium.support.ui.Select;
 import ru.stqa.addressbook.model.ContactData;
 import org.openqa.selenium.By;
+import ru.stqa.addressbook.model.GroupData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +17,32 @@ public class ContactHelper extends HelperBase {
         super(manager);
     }
 
-    public void createContact(ContactData contact) {
+    public void createContactWithGroup(ContactData contact) {
         openAddContactPage();
         fillContactForm(contact);
         //fillContactFormWithoutAttach(contact);
         submitContactCreation();
         returnToContactsPage();
+    }
+
+    public void createContact(ContactData contact) {
+        openAddContactPage();
+        fillContactForm(contact);
+        //fillContactFormWithoutAttach(contact);
+        submitContactCreation();
+        openAddContactPage();;
+    }
+
+    public void createContactInGroup(ContactData contact, GroupData group) {
+        openAddContactPage();
+        fillContactForm(contact);
+        selectGroup(group);
+        submitContactCreation();
+        returnToContactsPage();
+    }
+
+    private void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
     }
 
     private void returnToContactsPage() {
@@ -82,11 +104,6 @@ public class ContactHelper extends HelperBase {
         click(By.cssSelector(String.format("input[value='%s']", contact.id())));
     }
 
-    public int getContactsCount() {
-        openContactsPage();
-        return manager.driver.findElements(By.name("selected[]")).size();
-    }
-
     private void selectAllContacts() {
         var checkBoxes = manager.driver.findElements(By.name("selected[]"));
         for (var checkBox : checkBoxes) {
@@ -131,4 +148,21 @@ public class ContactHelper extends HelperBase {
         submitContactModification();
         returnToContactsPage();
     }
+
+    public void removeContactFromGroup(ContactData contact, GroupData group) {
+            openContactsPage();
+            selectGroupFilter(group);
+            selectContact(contact);
+            submitRemoveFromGroup();
+            //returnToContactsPage();
+        }
+
+    private void submitRemoveFromGroup() {
+        click(By.name("remove"));
+    }
+
+    private void selectGroupFilter(GroupData group) {
+        new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+    }
 }
+

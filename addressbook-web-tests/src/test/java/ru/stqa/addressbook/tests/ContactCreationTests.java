@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.stqa.addressbook.model.GroupData;
 
 
 import java.io.File;
@@ -39,9 +40,9 @@ public class ContactCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("contactProvider")
     public void canCreateContact(ContactData contact) {
-        var oldContacts = app.contacts().getContactsList();
+        var oldContacts = app.hbm().getContactList();
         app.contacts().createContact(contact);
-        var newContacts = app.contacts().getContactsList();
+        var newContacts = app.hbm().getContactList();
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
@@ -50,7 +51,11 @@ public class ContactCreationTests extends TestBase {
         var lastNewContact = newContacts.get(newContacts.size() - 1);
         //var lastNewContactId = newContacts.stream().map(ContactData::id).max(String::compareTo).get();
         expectedContactList.add(contact
-                .withId(lastNewContact.id()).withEmail("").withAddress("").withPhoneHome("").withPhoto(""));
+                .withId(lastNewContact.id())
+                .withEmail(lastNewContact.email())
+                .withAddress(lastNewContact.address())
+                .withPhoneHome(lastNewContact.phoneHome())
+                .withPhoto(lastNewContact.photo()));
         expectedContactList.sort(compareById);
         Assertions.assertEquals(expectedContactList, newContacts);
         //Collections.shuffle(expectedContactList);
@@ -82,4 +87,33 @@ public class ContactCreationTests extends TestBase {
         app.contacts().createContact(contact);
     }
 
+    @Test
+    void canCreatedContactInGroup(){
+        var contact = new ContactData()
+                .withFirsName(CommonFunctions.randomString(10))
+                .withLastName(CommonFunctions.randomString(10))
+                .withPhoto(CommonFunctions.randomFile("src/test/resources/images"));
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "Group name4", "Group header4", "Group footer4"));
+        }
+        var group = app.hbm().getGroupList().get(0);
+        var oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().createContactInGroup(contact, group);
+        var newRelated = app.hbm().getContactsInGroup(group);
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newRelated.sort(compareById);
+        var expectedRelated = new ArrayList<>(oldRelated);
+        var lastNewRelated = newRelated.get(newRelated.size()-1);
+        expectedRelated.add(contact
+                .withId(lastNewRelated.id())
+                .withEmail(lastNewRelated.email())
+                .withAddress(lastNewRelated.address())
+                .withPhoneHome(lastNewRelated.phoneHome())
+                .withPhoto(lastNewRelated.photo()));
+        expectedRelated.sort(compareById);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+        Assertions.assertEquals(expectedRelated, newRelated);
+    }
 }

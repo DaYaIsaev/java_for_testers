@@ -41,12 +41,28 @@ public class ContactHelper extends HelperBase {
         returnToContactsPage();
     }
 
+    public void addContactInGroup(ContactData contact, GroupData group) {
+        openContactsPage();
+        selectContact(contact);
+        addToGroup(group);
+        submitAddTo();
+        //returnToContactsPage();
+    }
+
     private void selectGroup(GroupData group) {
         new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
     }
 
+    private void addToGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("to_group"))).selectByValue(group.id());
+    }
+
     private void returnToContactsPage() {
         click(By.linkText("home page"));
+    }
+
+    private void submitAddTo(){
+        click(By.name("add"));
     }
 
     private void submitContactCreation() {

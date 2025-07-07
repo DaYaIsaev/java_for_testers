@@ -51,28 +51,39 @@ public class ContactRemovalTests extends TestBase {
 
     @Test
     void canRemoveContactFromGroup(){
-        var contact = new ContactData()
-                .withFirsName(CommonFunctions.randomString(10))
-                .withLastName(CommonFunctions.randomString(10))
-                .withPhoto(CommonFunctions.randomFile("src/test/resources/images"));
+        if (app.hbm().getContactCount() == 0){
+            var contact = new ContactData()
+                    .withFirsName(CommonFunctions.randomString(10))
+                    .withLastName(CommonFunctions.randomString(10))
+                    .withPhoto(CommonFunctions.randomFile("src/test/resources/images"));
+            app.contacts().createContact(contact);
+        }
         if (app.hbm().getGroupCount() == 0) {
             app.hbm().createGroup(new GroupData("", "Group name4", "Group header4", "Group footer4"));
         }
         var group = app.hbm().getGroupList().get(0);
+        var getCountContactsInGroup = (app.hbm().getContactsInGroup(group)).size();
+        if (getCountContactsInGroup == 0) {
+            var getContacts = app.hbm().getContactList();
+            Comparator<ContactData> compareById = (o1, o2) -> {
+                return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+            };
+            getContacts.sort(compareById);
+            var contact = getContacts.get(getContacts.size()-1);
+            app.contacts().addContactInGroup(contact, group);         }
         var oldRelated = app.hbm().getContactsInGroup(group);
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         oldRelated.sort(compareById);
-        app.contacts().createContactInGroup(contact, group);
-        var newRelated = app.hbm().getContactsInGroup(group);
-        var index = newRelated.size()-1;
-        contact = newRelated.get(index);
+        var contact = oldRelated.get(oldRelated.size()-1);
         app.contacts().removeContactFromGroup(contact, group);
-        var actualRelated = new ArrayList<>(newRelated);
-        var lastNewRelated = newRelated.get(newRelated.size()-1);
-        actualRelated.remove(lastNewRelated);
-        actualRelated.sort(compareById);
-        Assertions.assertEquals(oldRelated, actualRelated );
+        var newRelated = app.hbm().getContactsInGroup(group);
+        newRelated.sort(compareById);
+        //var actualRelated = new ArrayList<>(newRelated);
+        var lastOldRelated = oldRelated.get(oldRelated.size()-1);
+        oldRelated.remove(lastOldRelated);
+        oldRelated.sort(compareById);
+        Assertions.assertEquals(oldRelated, newRelated);
     }
 }

@@ -26,7 +26,8 @@ public class ContactCreationTests extends TestBase {
 //                    "", "", CommonFunctions.randomString(i * 10), "", "", "", "", "", "", "", "", "", ""));
 //        }
         ObjectMapper mapper = new ObjectMapper();
-        var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>(){});
+        var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>() {
+        });
         result.addAll(value);
         return result;
     }
@@ -46,7 +47,7 @@ public class ContactCreationTests extends TestBase {
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
-       newContacts.sort(compareById);
+        newContacts.sort(compareById);
         var expectedContactList = new ArrayList<>(oldContacts);
         var lastNewContact = newContacts.get(newContacts.size() - 1);
         //var lastNewContactId = newContacts.stream().map(ContactData::id).max(String::compareTo).get();
@@ -79,7 +80,7 @@ public class ContactCreationTests extends TestBase {
     }
 
     @Test
-    void canCreatedContactWithFile(){
+    void canCreatedContactWithFile() {
         var contact = new ContactData()
                 .withFirsName(CommonFunctions.randomString(10))
                 .withLastName(CommonFunctions.randomString(10))
@@ -88,24 +89,27 @@ public class ContactCreationTests extends TestBase {
     }
 
     @Test
-    void canCreatedContactInGroup(){
+    void canCreatedContactInGroup() {
         var contact = new ContactData()
                 .withFirsName(CommonFunctions.randomString(10))
                 .withLastName(CommonFunctions.randomString(10))
                 .withPhoto(CommonFunctions.randomFile("src/test/resources/images"));
+        app.contacts().createContact(contact);
         if (app.hbm().getGroupCount() == 0) {
             app.hbm().createGroup(new GroupData("", "Group name4", "Group header4", "Group footer4"));
         }
         var group = app.hbm().getGroupList().get(0);
         var oldRelated = app.hbm().getContactsInGroup(group);
-        app.contacts().createContactInGroup(contact, group);
+        var getContacts = app.hbm().getContactList();
+        contact = getContacts.get(getContacts.size() - 1);
+        app.contacts().addContactInGroup(contact, group);
         var newRelated = app.hbm().getContactsInGroup(group);
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newRelated.sort(compareById);
         var expectedRelated = new ArrayList<>(oldRelated);
-        var lastNewRelated = newRelated.get(newRelated.size()-1);
+        var lastNewRelated = newRelated.get(newRelated.size() - 1);
         expectedRelated.add(contact
                 .withId(lastNewRelated.id())
                 .withEmail(lastNewRelated.email())
@@ -113,7 +117,7 @@ public class ContactCreationTests extends TestBase {
                 .withPhoneHome(lastNewRelated.phoneHome())
                 .withPhoto(lastNewRelated.photo()));
         expectedRelated.sort(compareById);
-        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+        //Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
         Assertions.assertEquals(expectedRelated, newRelated);
     }
 }

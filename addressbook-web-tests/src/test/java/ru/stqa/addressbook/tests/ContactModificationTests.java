@@ -1,11 +1,13 @@
 package ru.stqa.addressbook.tests;
 
+import ru.stqa.addressbook.common.CommonFunctions;
 import ru.stqa.addressbook.model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
+import java.util.Set;
 
 import static ru.stqa.addressbook.common.CommonFunctions.randomFile;
 
@@ -22,17 +24,17 @@ public class ContactModificationTests extends TestBase {
         var oldContacts = app.hbm().getContactList();
         var rnd = new Random();
         var index = rnd.nextInt(oldContacts.size());
-        var testContactData = new ContactData().withFirsName("modified name");
+        var testContactData = new ContactData().withFirsName(CommonFunctions.randomString(10));
         app.contacts().modifyContact(oldContacts.get(index), testContactData);
         var newContacts = app.hbm().getContactList();
         var expectedList = new ArrayList<>(oldContacts);
         expectedList.set(index, testContactData.withId(oldContacts.get(index).id()));
-        Comparator<ContactData> compareById = (o1, o2) -> {
-            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
-        };
-        newContacts.sort(compareById);
-        expectedList.sort(compareById);
-        Assertions.assertEquals(newContacts, expectedList);
+//        Comparator<ContactData> compareById = (o1, o2) -> {
+//            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+//        };
+//        newContacts.sort(compareById);
+//        expectedList.sort(compareById);
+        Assertions.assertEquals(Set.copyOf(newContacts), Set.copyOf(expectedList));
 
     }
 }

@@ -1,12 +1,15 @@
 package ru.stqa.addressbook.manager;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import ru.stqa.addressbook.model.ContactData;
 import org.openqa.selenium.By;
 import ru.stqa.addressbook.model.GroupData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static ru.stqa.addressbook.common.CommonFunctions.randomFile;
 
@@ -30,7 +33,7 @@ public class ContactHelper extends HelperBase {
         fillContactForm(contact);
         //fillContactFormWithoutAttach(contact);
         submitContactCreation();
-        openAddContactPage();;
+        returnToContactsPage();;
     }
 
     public void createContactInGroup(ContactData contact, GroupData group) {
@@ -179,6 +182,39 @@ public class ContactHelper extends HelperBase {
 
     private void selectGroupFilter(GroupData group) {
         new Select(manager.driver.findElement(By.name("group"))).selectByValue(group.id());
+    }
+
+    public String getPhones(String id) {
+       return manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[6]", id))).getText();
+    }
+
+    public Map<String, String> getPhones() {
+        var result = new HashMap<String, String>();
+        List<WebElement> rows =  manager.driver.findElements(By.name("entry"));
+        for (WebElement row : rows){
+            var id = row.findElement(By.tagName("input")).getAttribute("id");
+            var phones = row.findElements(By.tagName("td")).get(5).getText();
+            result.put(id, phones);
+        }
+        return result;
+    }
+
+    public String getEmails(String id) {
+         WebElement td = manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[5]", id)));
+         List<WebElement> rows = td.findElements(By.tagName("a"));
+         String emails = "";
+         for (WebElement row : rows){
+             var email = row.getText();
+              emails = emails + email + "\n";
+         }
+            return emails.substring(0,emails.length()-1);
+    }
+
+    public String getAddress(String id) {
+        return manager.driver.findElement(By.xpath(
+                String.format("//input[@id='%s']/../../td[4]", id))).getText();
     }
 }
 

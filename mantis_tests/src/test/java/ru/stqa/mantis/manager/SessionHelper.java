@@ -1,6 +1,7 @@
 package ru.stqa.mantis.manager;
 
 import org.openqa.selenium.By;
+import ru.stqa.mantis.model.UserDate;
 
 public class SessionHelper extends HelperBase{
     public SessionHelper(ApplicationManager manager){
@@ -19,18 +20,18 @@ public class SessionHelper extends HelperBase{
     }
 
 
-    public void signUp(String username, String email, String password) {
+    public void signUp(UserDate user) {
         click(By.cssSelector("a.back-to-login-link.pull-left[href=\"signup_page.php\"]"));
-        type(By.name("username"),username);
-        type(By.name("email"), email);
+        type(By.name("username"),user.username());
+        type(By.name("email"), user.email());
         click(By.cssSelector("input[type='submit']"));
     }
 
 
-    public void updateUser(String realName, String password) {
-        type(By.name("realname"), realName);
-        type(By.name("password"), password);
-        type(By.name("password_confirm"), password);
+    public void updateUser(UserDate user) {
+        type(By.name("realname"), user.username());
+        type(By.name("password"), user.password());
+        type(By.name("password_confirm"), user.password());
         click(By.cssSelector("button[type=\"submit\"]"));
     }
 }

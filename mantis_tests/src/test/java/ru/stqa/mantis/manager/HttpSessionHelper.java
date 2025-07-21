@@ -2,6 +2,7 @@ package ru.stqa.mantis.manager;
 
 
 import okhttp3.*;
+import ru.stqa.mantis.model.UserDate;
 
 import java.io.IOException;
 import java.net.CookieManager;
@@ -16,10 +17,10 @@ public class HttpSessionHelper extends HelperBase {
         client = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(new CookieManager())).build();
     }
 
-    public void login(String username, String password) {
+    public void login(UserDate user) {
         RequestBody formBody = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
+                .add("username",user.username())
+                .add("password", user.password())
                 .build();
         Request request = new Request.Builder()
                 .url(String.format("%s/login.php", manager.property("web.baseUrl")))

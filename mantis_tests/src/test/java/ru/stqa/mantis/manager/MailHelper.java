@@ -2,6 +2,7 @@ package ru.stqa.mantis.manager;
 
 import jakarta.mail.*;
 import ru.stqa.mantis.model.MailMessage;
+import ru.stqa.mantis.model.UserDate;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -15,11 +16,11 @@ public class MailHelper extends HelperBase {
         super(manager);
     }
 
-    public List<MailMessage> receive(String username, String password, Duration duration) {
+    public List<MailMessage> receive(UserDate user, Duration duration) {
         var start = System.currentTimeMillis();
         while (System.currentTimeMillis() < start + duration.toMillis()){
             try {
-                var inbox = getInbox(username, password);
+                var inbox = getInbox(user);
                 inbox.open(Folder.READ_ONLY);
                 var messages = inbox.getMessages();
 
@@ -51,12 +52,12 @@ public class MailHelper extends HelperBase {
         throw new RuntimeException("No mail");
     }
 
-    private static Folder getInbox(String username, String password)  {
+    private Folder getInbox(UserDate user)  {
 
         try {
             var session = Session.getInstance(new Properties());
             Store store = session.getStore("pop3");
-            store.connect("localhost", String.format("%s@localhost", username), password);
+            store.connect("localhost", user.email(), user.password());
             var inbox = store.getFolder("INBOX");
             return inbox;
         } catch (MessagingException e) {
@@ -65,10 +66,10 @@ public class MailHelper extends HelperBase {
 
     }
 
-    public void drain(String username, String password) {
+    public void drain(UserDate user) {
 
         try {
-            var inbox = getInbox(username, password);
+            var inbox = getInbox(user);
             inbox.open(Folder.READ_WRITE);
             Arrays.stream(inbox.getMessages()).forEach(m -> {
                 try {
@@ -84,5 +85,7 @@ public class MailHelper extends HelperBase {
         }
 
     }
+
+
 
 }

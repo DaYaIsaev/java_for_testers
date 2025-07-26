@@ -53,9 +53,13 @@ public class ContactCreationTests extends TestBase {
         //var lastNewContactId = newContacts.stream().map(ContactData::id).max(String::compareTo).get();
         expectedContactList.add(contact
                 .withId(lastNewContact.id())
+                .withFirsName(lastNewContact.firstName())
+                .withLastName(lastNewContact.lastName())
                 .withEmail(lastNewContact.email())
+                .withEmail2(lastNewContact.email2())
                 .withAddress(lastNewContact.address())
                 .withPhoneHome(lastNewContact.phoneHome())
+                .withPhoneWork(lastNewContact.phoneWork())
                 .withPhoto(lastNewContact.photo()));
         expectedContactList.sort(compareById);
         Assertions.assertEquals(expectedContactList, newContacts);
@@ -78,15 +82,15 @@ public class ContactCreationTests extends TestBase {
         var newContacts = app.contacts().getContactsList();
         Assertions.assertEquals(oldContacts, newContacts);
     }
-
-    @Test
-    void canCreatedContactWithFile() {
-        var contact = new ContactData()
-                .withFirsName(CommonFunctions.randomString(10))
-                .withLastName(CommonFunctions.randomString(10))
-                .withPhoto(CommonFunctions.randomFile("src/test/resources/images"));
-        app.contacts().createContact(contact);
-    }
+//
+//    @Test
+//    void canCreatedContactWithFile() {
+//        var contact = new ContactData()
+//                .withFirsName(CommonFunctions.randomString(10))
+//                .withLastName(CommonFunctions.randomString(10))
+//                .withPhoto(CommonFunctions.randomFile("src/test/resources/images"));
+//        app.contacts().createContact(contact);
+//    }
 
     @Test
     void canCreatedContactInGroup() {

@@ -80,7 +80,10 @@ public class ContactHelper extends HelperBase {
         }
         type(By.name("address"), contacts.address());
         type(By.name("home"), contacts.phoneHome());
+        type(By.name("work"), contacts.phoneWork());
         type(By.name("email"), contacts.email());
+        type(By.name("email2"), contacts.email2());
+
     }
 
     private void fillContactFormWithoutAttach(ContactData contacts) {
